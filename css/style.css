@@ -5,10 +5,6 @@ html, body, .container-fluid, .row {
   padding: 0;
 }
 
-.row.content {
-  height: 40px;
-}
-
 #page-wrapper {
   min-height: 849px;
 }
