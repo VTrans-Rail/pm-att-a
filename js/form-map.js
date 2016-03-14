@@ -2,19 +2,9 @@ require([
   "esri/map",
   "esri/layers/FeatureLayer",
   "esri/dijit/FeatureTable",
-  "dojo/dom-construct",
-  "dojo/dom",
-  "dojo/parser",
-  "dojo/on",
-  "dojo/_base/lang",
-  "dijit/registry",
-  "dijit/form/Button",
-  "dijit/layout/ContentPane",
-  "dijit/layout/BorderContainer",
-  "dijit/form/TextBox",
   "dojo/domReady!"
 ],
-function(Map, FeatureTable) {
+function(Map, FeatureLayer, FeatureTable) {
 
   var map = new Map("map", {
     center: [-73.75, 44],
@@ -36,7 +26,7 @@ function(Map, FeatureTable) {
 
     myFeatureTable = new FeatureTable({
       featureLayer : myFeatureLayer,
-      outFields:  ["*"],
+      outFields:  ["Collected","Crew","Status","Spp_Code", "Height", "Cmn_Name","Sci_Name","Street","Native"],
       map : map
     }, 'footer');
 
