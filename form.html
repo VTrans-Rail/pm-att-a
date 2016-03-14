@@ -25,12 +25,11 @@
 
     <!-- Esri JS API -->
     <link rel="stylesheet" href="https://js.arcgis.com/3.16/esri/css/esri.css">
+    <link rel="stylesheet" href="//js.arcgis.com/3.16/dijit/themes/claro/claro.css">
     <script src="https://js.arcgis.com/3.16/"></script>
 
     <!-- Custom JS -->
-    <script type="text/javascript" src="/js/form-map.js">
-
-    </script>
+    <script type="text/javascript" src="/js/form-map.js"></script>
 
   </head>
   <body>
@@ -44,60 +43,55 @@
       <div class="row content">
         <div class="col-sm-5 col-lg-3 sidebar">
           <form>
-                  <div class="form-group">
-                    <label for="LicenseHolder">License Holder</label>
-                    <input type="text" class="form-control" id="LicenseHolder" placeholder="Start typing to search">
-                    <p class="help-block">
-                      Start typing part of the license holder's <br> name to see a list of matching licenses.
-                      </p>
-                  </div>
-                  <div class="form-group">
-                    <p class="help-block">
-                      <strong>Note: Information below <br>automatically filled in.</strong>
-                    </p>
-                    <label for="AgreementNumber">Agreement Number</label>
-                    <input type="text" class="form-control" id="AgreementNumber" placeholder="B00000-00">
-                  </div>
-                  <div class="form-group">
-                    <label for="LicenseType">License Type</label>
-                    <input type="text" class="form-control" id="LicenseType" placeholder="Gas, Water, Sewer, etc">
-                  </div>
-                  <div class="form-group">
-                    <label for="LH_Type">License Holder Type</label>
-                    <input type="text" class="form-control" id="LH_Type" placeholder="Town, Company, Individual, etc">
-                  </div>
-                  <div class="form-group">
-                    <p>
-                      License Holder Address:
-                    </p>
-                    <label for="LH_Address">Address</label>
-                    <input type="text" class="form-control" id="LH_Address" placeholder="123 Main St">
-                    <label for="LH_City">City</label>
-                    <input type="text" class="form-control" id="LH_City" placeholder="Burlington">
-                    <label for="LH_State">State</label>
-                    <input type="text" class="form-control" id="LH_State" placeholder="Vermont">
-                    <label for="LH_Zip">ZIP</label>
-                    <input type="text" class="form-control" id="LH_Zip" placeholder="05401">
-                  </div>
-                  <div class="form-group">
-                    <label for="Remarks">Remarks</label>
-                    <textarea class="form-control" rows="3" id="Remarks" placeholder="Additonal Information"></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-default">Submit</button>
-                </form>
-
-
-
-
+            <div class="form-group">
+              <label for="LicenseHolder">License Holder</label>
+              <input type="text" class="form-control" id="LicenseHolder" placeholder="Start typing to search">
+              <p class="help-block">
+                Start typing part of the license holder's <br> name to see a list of matching licenses.
+                </p>
+            </div>
+            <div class="form-group">
+              <p class="help-block">
+                <strong>Note: Information below <br>automatically filled in.</strong>
+              </p>
+              <label for="AgreementNumber">Agreement Number</label>
+              <input type="text" class="form-control" id="AgreementNumber" placeholder="B00000-00">
+            </div>
+            <div class="form-group">
+              <label for="LicenseType">License Type</label>
+              <input type="text" class="form-control" id="LicenseType" placeholder="Gas, Water, Sewer, etc">
+            </div>
+            <div class="form-group">
+              <label for="LH_Type">License Holder Type</label>
+              <input type="text" class="form-control" id="LH_Type" placeholder="Town, Company, Individual, etc">
+            </div>
+            <div class="form-group">
+              <p>
+                License Holder Address:
+              </p>
+              <label for="LH_Address">Address</label>
+              <input type="text" class="form-control" id="LH_Address" placeholder="123 Main St">
+              <label for="LH_City">City</label>
+              <input type="text" class="form-control" id="LH_City" placeholder="Burlington">
+              <label for="LH_State">State</label>
+              <input type="text" class="form-control" id="LH_State" placeholder="Vermont">
+              <label for="LH_Zip">ZIP</label>
+              <input type="text" class="form-control" id="LH_Zip" placeholder="05401">
+            </div>
+            <div class="form-group">
+              <label for="Remarks">Remarks</label>
+              <textarea class="form-control" rows="3" id="Remarks" placeholder="Additonal Information"></textarea>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
         </div><!-- end sidebar -->
         <div class="col-md-7 col-lg-9 map">
-          <div id="map"></div>
-          <div id="footer">
-            <h1>hello</h1>
+          <div id="map" style=""></div>
+          <div id="bot" data-dojo-type="dijit/layout/ContentPane">
+                <div id="myTableNode"></div>
           </div>
         </div><!-- end map -->
       </div><!-- end row -->
-    </div><!-- end wrapper -->
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
