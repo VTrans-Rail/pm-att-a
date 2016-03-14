@@ -41,10 +41,10 @@ function(Map, FeatureTable) {
     map.addLayer(myFeatureLayer);
 
     myFeatureTable = new FeatureTable({
-      "featureLayer" : myFeatureLayer,
-      "outFields":  ["*"],
-      "map" : map
-    }, 'myTableNode');
+      featureLayer : myFeatureLayer,
+      outFields:  ["*"],
+      map : map
+    }, 'footer');
 
     myFeatureTable.startup();
 
