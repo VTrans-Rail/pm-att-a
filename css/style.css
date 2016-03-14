@@ -1,13 +1,30 @@
+/*
+     Whole page Classes
+ */
 html, body, .container-fluid, .row {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#map {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
 }
 
-#page-wrapper {
-  min-height: 849px;
+/*
+     Navbar Classes
+ */
+
+.navbar-header {
+  padding: 10px;
+  max-height: 50px;
 }
+
 
 /*
      Sidebar Classes
@@ -24,8 +41,12 @@ html, body, .container-fluid, .row {
      top: 0px;
      left: 0;
      bottom: 0;
-     padding-top:  64px;
+     top:  50px;
+     padding-top: 10px;
+     padding-bottom: 25px;
      z-index: 999;
      display: block;
+     overflow-y: scroll;
+     overflow-x: hidden;
    }
  }
