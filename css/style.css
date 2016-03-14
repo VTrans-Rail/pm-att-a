@@ -6,7 +6,7 @@ html, body, .container-fluid, .row {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 #map {
@@ -50,3 +50,14 @@ html, body, .container-fluid, .row {
      overflow-x: hidden;
    }
  }
+
+ /*
+      Footer Classes
+  */
+
+  .footer {
+    z-index: 1001;
+    background-color: green;
+    min-height: 60px;
+    bottom: 0;
+  }
