@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>Attachment A Update</title>
 
     <!-- Bootstrap -->
     <link href="css/calcite-bootstrap.min.css" rel="stylesheet">
@@ -37,29 +37,50 @@
     <div class="container-fluid">
       <nav class="navbar navbar-default navbar-static-top">
         <div class="navbar-header">
-          <h1>Hello World!</h1>
+          <h2>Attachment A Update Form</h2>
         </div>
       </nav><!-- end navbar -->
       <div class="row content">
-        <div class="col-md-5 navbar-default sidebar">
+        <div class="col-md-5 col-lg-3 navbar-default sidebar">
           <form>
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                    <label for="LicenseHolder">License Holder</label>
+                    <input type="text" class="form-control" id="LicenseHolder" placeholder="Start typing to search">
+                    <p class="help-block">
+                      Start typing part of the license holder's <br> name to see a list of matching licenses.
+                      </p>
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <p class="help-block">
+                      <strong>Note: Information below <br>automatically filled in.</strong>
+                    </p>
+                    <label for="AgreementNumber">Agreement Number</label>
+                    <input type="text" class="form-control" id="AgreementNumber" placeholder="B00000-00">
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <input type="file" id="exampleInputFile">
-                    <p class="help-block">Example block-level help text here.</p>
+                    <label for="LicenseType">License Type</label>
+                    <input type="text" class="form-control" id="LicenseType" placeholder="Gas, Water, Sewer, etc">
                   </div>
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> Check me out
-                    </label>
+                  <div class="form-group">
+                    <label for="LH_Type">License Holder Type</label>
+                    <input type="text" class="form-control" id="LH_Type" placeholder="Town, Company, Individual, etc">
+                  </div>
+                  <div class="form-group">
+                    <p>
+                      License Holder Address:
+                    </p>
+                    <label for="LH_Address">Address</label>
+                    <input type="text" class="form-control" id="LH_Address" placeholder="123 Main St">
+                    <label for="LH_City">City</label>
+                    <input type="text" class="form-control" id="LH_City" placeholder="Burlington">
+                    <label for="LH_State">State</label>
+                    <input type="text" class="form-control" id="LH_State" placeholder="Vermont">
+                    <label for="LH_Zip">ZIP</label>
+                    <input type="text" class="form-control" id="LH_Zip" placeholder="05401">
+                  </div>
+                  <div class="form-group">
+                    <label for="Remarks">Remarks</label>
+                    <textarea class="form-control" rows="3" id="Remarks" placeholder="Additonal Information"></textarea>
                   </div>
                   <button type="submit" class="btn btn-default">Submit</button>
                 </form>
@@ -68,9 +89,8 @@
 
 
         </div><!-- end sidebar -->
-        <div class="col-md-7 col-md-offset-3" id="map">
-
-        </div><!-- end right panel -->
+        <div class="col-md-7 col-md-offset-3 col-lg-9 col-lg-offset-3" id="map"></div>
+          <!-- end map -->
       </div><!-- end row -->
     </div><!-- end wrapper -->
 
