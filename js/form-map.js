@@ -47,9 +47,5 @@ function(Map, FeatureTable) {
     }, 'footer');
 
     myFeatureTable.startup();
-
-    on(myFeatureTable, "load", function(evt){
-      console.log("The load event - ", evt);
-    });
   };
 });
