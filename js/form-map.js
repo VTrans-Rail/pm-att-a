@@ -25,8 +25,6 @@ function(Map, FeatureTable) {
   map.on("load", loadTable);
 
   function loadTable(){
-    console.log("Map loaded, starting table.");
-
     // Create the feature layer
     var myFeatureLayer = new FeatureLayer("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Warren_College_Trees/FeatureServer/0",
     {
@@ -35,10 +33,6 @@ function(Map, FeatureTable) {
       outFields: ["*"],
       id: "fLayer"
     });
-
-    console.log("myFeatureLayer");
-
-    map.addLayer(myFeatureLayer);
 
     myFeatureTable = new FeatureTable({
       featureLayer : myFeatureLayer,
