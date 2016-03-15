@@ -45,7 +45,7 @@
           <form>
             <div class="form-group">
               <label for="LicenseHolder">License Holder</label>
-              <input type="text" class="form-control" id="LicenseHolder" placeholder="Start typing to search">
+              <input type="text" class="form-control" id="LicenseHolder" placeholder="Start typing to search" onchange="showTable()">
               <p class="help-block">
                 Start typing part of the license holder's <br> name to see a list of matching licenses.
                 </p>
@@ -86,8 +86,8 @@
           </form>
         </div><!-- end sidebar -->
         <div class="col-md-7 col-lg-9 map">
-          <div id="map"></div>
-          <div id="footer"></div>
+          <div id="map" style="height: 100%"></div>
+          <div id="footer" style="display:none;"></div>
         </div><!-- end map -->
       </div><!-- end row -->
 

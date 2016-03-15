@@ -33,3 +33,8 @@ function(Map, FeatureLayer, FeatureTable) {
     myFeatureTable.startup();
   };
 });
+
+function showTable(){
+  document.getElementById('footer').style.display = "block";
+  document.getElementById('map').style.height = "50%";
+};
