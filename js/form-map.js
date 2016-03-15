@@ -3,43 +3,90 @@ require([
   "esri/layers/FeatureLayer",
   "esri/dijit/FeatureTable",
   "esri/tasks/query",
+  "esri/tasks/QueryTask",
+  "dojo/dom",
+  "dojo/on",
   "dojo/domReady!"
 ],
-function(Map, FeatureLayer, FeatureTable, MLAQuery) {
+function(
+  Map,
+  FeatureLayer,
+  FeatureTable,
+  Query,
+  QueryTask,
+  dom,
+  on
+){
 
+// Setup basic map
   var map = new Map("map", {
     center: [-73.75, 44],
     zoom: 7,
     basemap: "topo-vector"
   });
 
-  // map.on("load", loadTable);
+  // Create the feature layers
+
+  // MLA feature layer
+  var MLAURL = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/dev_Attachment_A/FeatureServer/1";
+  var MLAFeatureLayer = new FeatureLayer(MLAURL,
+  {
+    mode: FeatureLayer.MODE_ONDEMAND,
+    visible: false,
+    outFields: ["AgreementNumber","LicenseHolder", "LH_Type","LH_Address",
+    "LH_City","LH_State","LH_Zip","Remarks"],
+    id: "MLAtable"
+  });
+
+  // ATT A occupations feature layer
+  var OccupationsFeatureLayer = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/dev_Attachment_A/FeatureServer/0",
+  {
+    mode: FeatureLayer.MODE_AUTO,
+    outFields: ["FromMP","ToMP","VAL_Parcel","VAL_STA","Town","OccupationType",
+    "OccupationElevation","OccupationHWYROW","OccupationCoID","WireType","WireSize",
+    "PipeType","PipeSize","PipePressurized","PipeDepth","PoleCount","AnchorCount",
+    "GuyCount","BracePoleCount","ManholeCount","VaultCount","PedCount","Fee","Remarks"],
+    id: "AttAFC"
+  });
 
   // add listener for license holder search
   var LH_SearchBox = document.getElementById("LicenseHolder");
-  console.log(LH_SearchBox)
-  LH_SearchBox.addEventListener("change",loadTable);
+  // LH_SearchBox.addEventListener("change",execute);
 
+
+  // add QueryTask
+
+  var MLAqueryTask = new QueryTask(MLAURL);
+
+  var MLAquery = new Query();
+    MLAquery.returnGeometry = false;
+    MLAquery.outFields = ["AgreementNumber","LicenseHolder", "LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"];
+
+  on(dom.byId("execute"), "click", execute);
+
+  function execute() {
+    LH_Value = dom.byId("LicenseHolder").value;
+    console.log(LH_Value);
+    MLAquery.where = "LicenseHolder LIKE '%" + LH_Value + "%'";
+    MLAqueryTask.execute(MLAquery, showResults);
+  };
+
+  function showResults (results) {
+    var resultItems = [];
+    var resultCount = results.features.length;
+    for (var i = 0; i < resultCount; i++) {
+      var featureAttributes = results.features[i].attributes;
+      for (var attr in featureAttributes) {
+        console.log(featureAttributes[attr]);
+      }
+    }
+  };
+
+  // Show table at the bottom half of the map div
   function loadTable(){
     // make map halfsize and display footer
     document.getElementById('footer').style.display = "block";
     document.getElementById('map').style.height = "50%";
-
-    // Create the feature layer
-    var MLAFeatureLayer = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/dev_Attachment_A/FeatureServer/1",
-    {
-      mode: FeatureLayer.MODE_ONDEMAND,
-      visible: false,
-      outFields: ["AgreementNumber","LicenseHolder", "LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"],
-      id: "MLAtable"
-    });
-
-    var OccupationsFeatureLayer = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/dev_Attachment_A/FeatureServer/0",
-      {
-        mode: FeatureLayer.MODE_AUTO,
-        outFields: ["FromMP","ToMP","VAL_Parcel","VAL_STA","Town","OccupationType","OccupationElevation","OccupationHWYROW","OccupationCoID","WireType","WireSize","PipeType","PipeSize","PipePressurized","PipeDepth","PoleCount","AnchorCount","GuyCount","BracePoleCount","ManholeCount","VaultCount","PedCount","Fee","Remarks"],
-        id: "AttAFC"
-      });
 
     OccupationsTable = new FeatureTable({
       featureLayer : OccupationsFeatureLayer,
@@ -50,12 +97,7 @@ function(Map, FeatureLayer, FeatureTable, MLAQuery) {
     OccupationsTable.startup();
   };
 
-  // function MLAQuery(LH_Name){
-  //
-  // }
-});
+  function MLAQuery(LH_Name){
 
-// function showTable(){
-//   document.getElementById('footer').style.display = "block";
-//   document.getElementById('map').style.height = "50%";
-// };
+  };
+});
