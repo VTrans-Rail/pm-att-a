@@ -61,17 +61,20 @@ function(
   var search = new Search({
     sources: [{
       featureLayer: MLAFeatureLayer,
-      outFields: ["LicenseHolder","AgreementNumber"],
+      outFields: ["AgreementNumber","LicenseType","LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"],
       displayField: "LicenseHolder",
       suggestionTemplate: "${LicenseHolder}: (${AgreementNumber})",
       name: "License Holders",
       placeholder: "example: Amtrak",
-      enableSuggestions: true
   }],
-    
+
   }, "LicenseHolder");
 
   search.startup();
+
+  on(search, "search-results", function(e) {
+    console.log('search-results.numErrors',e);
+  });
 
   // add QueryTask
 
