@@ -30,7 +30,7 @@ function(
   // Create the feature layers
 
   // MLA feature layer
-  var MLAURL = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1";
+  var MLAURL = "https://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1";
   var MLAFeatureLayer = new FeatureLayer(MLAURL,
   {
     mode: FeatureLayer.MODE_ONDEMAND,
@@ -41,7 +41,7 @@ function(
   });
 
   // ATT A occupations feature layer
-  var OccupationsFeatureLayer = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/0",
+  var OccupationsFeatureLayer = new FeatureLayer("https://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/0",
   {
     mode: FeatureLayer.MODE_AUTO,
     outFields: ["FromMP","ToMP","VAL_Parcel","VAL_STA","Town","OccupationType",
@@ -61,20 +61,46 @@ function(
   var search = new Search({
     sources: [{
       featureLayer: MLAFeatureLayer,
-      outFields: ["AgreementNumber","LicenseType","LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"],
+      outFields: ["LicenseHolder","AgreementNumber","LicenseType","LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"],
       displayField: "LicenseHolder",
       suggestionTemplate: "${LicenseHolder}: (${AgreementNumber})",
       name: "License Holders",
       placeholder: "example: Amtrak",
   }],
-
   }, "LicenseHolder");
 
   search.startup();
 
+  // when search completes, populate the form with results attributes
   on(search, "search-results", function(e) {
-    console.log('search-results.numErrors',e);
+    document.getElementById("LicenseHolder_input").value = "";
+    dom.byId('LicenseHolder_input').value = e.results[0][0].feature.attributes['LicenseHolder'];
+    dom.byId('AgreementNumber').value = e.results[0][0].feature.attributes['AgreementNumber'];
+    dom.byId('LicenseType').value = e.results[0][0].feature.attributes['LicenseType'];
+    dom.byId('LH_Type').value = e.results[0][0].feature.attributes['LH_Type'];
+    dom.byId('LH_Address').value = e.results[0][0].feature.attributes['LH_Address'];
+    dom.byId('LH_City').value = e.results[0][0].feature.attributes['LH_City'];
+    dom.byId('LH_State').value = e.results[0][0].feature.attributes['LH_State'];
+    dom.byId('LH_Zip').value = e.results[0][0].feature.attributes['LH_Zip'];
+    dom.byId('Remarks').value = e.results[0][0].feature.attributes['Remarks'];
   });
+
+  // add listener for clear search box X
+  var searchClear = document.getElementsByClassName("searchClear");
+  console.log(searchClear);
+  searchClear[0].addEventListener("click",clear);
+
+  function clear(){
+    document.getElementById("LicenseHolder_input").value = "";
+    document.getElementById('AgreementNumber').value = "";
+    document.getElementById('LicenseType').value = "";
+    document.getElementById('LH_Type').value = "";
+    document.getElementById('LH_Address').value = "";
+    document.getElementById('LH_City').value = "";
+    document.getElementById('LH_State').value = "";
+    document.getElementById('LH_Zip').value = "";
+    document.getElementById('Remarks').value = "";
+  }
 
   // add QueryTask
 
@@ -83,13 +109,10 @@ function(
   var MLAquery = new Query();
     MLAquery.outFields = ["AgreementNumber","LicenseHolder", "LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"];
 
-  on(dom.byId("execute"), "click", execute);
+  on(document.getElementById("execute"), "click", execute);
 
   function execute() {
-    LH_Value = dom.byId("LicenseHolder").value;
-    console.log(LH_Value);
     MLAquery.where = "LicenseHolder LIKE '%" + dom.byId("LicenseHolder").value + "%'";
-    console.log(MLAquery.where);
     MLAqueryTask.execute(MLAquery, showResults);
   };
 
