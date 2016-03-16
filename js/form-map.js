@@ -6,6 +6,7 @@ require([
   "esri/tasks/QueryTask",
   "dojo/dom",
   "dojo/on",
+  "esri/dijit/Search",
   "dojo/domReady!"
 ],
 function(
@@ -15,7 +16,8 @@ function(
   Query,
   QueryTask,
   dom,
-  on
+  on,
+  Search
 ){
 
 // Setup basic map
@@ -28,7 +30,7 @@ function(
   // Create the feature layers
 
   // MLA feature layer
-  var MLAURL = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/dev_Attachment_A/FeatureServer/1";
+  var MLAURL = "http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1";
   var MLAFeatureLayer = new FeatureLayer(MLAURL,
   {
     mode: FeatureLayer.MODE_ONDEMAND,
@@ -39,7 +41,7 @@ function(
   });
 
   // ATT A occupations feature layer
-  var OccupationsFeatureLayer = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/arcgis/rest/services/dev_Attachment_A/FeatureServer/0",
+  var OccupationsFeatureLayer = new FeatureLayer("http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/0",
   {
     mode: FeatureLayer.MODE_AUTO,
     outFields: ["FromMP","ToMP","VAL_Parcel","VAL_STA","Town","OccupationType",
@@ -54,12 +56,28 @@ function(
   // LH_SearchBox.addEventListener("change",execute);
 
 
+  // Make License Holder text box a search box
+
+  var search = new Search({
+    sources: [{
+      featureLayer: MLAFeatureLayer,
+      outFields: ["LicenseHolder","AgreementNumber"],
+      displayField: "LicenseHolder",
+      suggestionTemplate: "${LicenseHolder}: (${AgreementNumber})",
+      name: "License Holders",
+      placeholder: "example: Amtrak",
+      enableSuggestions: true
+  }],
+    
+  }, "LicenseHolder");
+
+  search.startup();
+
   // add QueryTask
 
   var MLAqueryTask = new QueryTask(MLAURL);
 
   var MLAquery = new Query();
-    MLAquery.returnGeometry = false;
     MLAquery.outFields = ["AgreementNumber","LicenseHolder", "LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"];
 
   on(dom.byId("execute"), "click", execute);
@@ -67,7 +85,8 @@ function(
   function execute() {
     LH_Value = dom.byId("LicenseHolder").value;
     console.log(LH_Value);
-    MLAquery.where = "LicenseHolder LIKE '%" + LH_Value + "%'";
+    MLAquery.where = "LicenseHolder LIKE '%" + dom.byId("LicenseHolder").value + "%'";
+    console.log(MLAquery.where);
     MLAqueryTask.execute(MLAquery, showResults);
   };
 
