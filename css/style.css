@@ -53,6 +53,41 @@ html, body, .container-fluid, .row {
    }
  }
 
+ /*Esri Overrides*/
+
+/*Remove search button*/
+.searchBtn.searchSubmit {
+  display: none;
+}
+
+/*Widen input text*/
+
+.arcgisSearch .searchGroup .searchInput {
+  width: 95%;
+  padding: 6px 0px 6px 12px;
+  border: 1px solid #959595;
+  border-radius: 0;
+}
+
+/*set search input box width to full - width of side elements*/
+
+.arcgisSearch .searchInputGroup {
+  width: 100%;
+  /*modified to 11 when sources select was removed*/
+}
+.arcgisSearch .searchExpandContainer {
+  width: 100%;
+}
+
+.arcgisSearch .searchClear {
+  right: 10px;
+}
+
+
+
+
+ /*End Esri Overrides*/
+
  /*
       Footer Classes
   */
