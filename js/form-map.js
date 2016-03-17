@@ -7,6 +7,7 @@ require([
   "dojo/dom",
   "dojo/on",
   "esri/dijit/Search",
+  "esri/graphic",
   "dojo/domReady!"
 ],
 function(
@@ -17,7 +18,8 @@ function(
   QueryTask,
   dom,
   on,
-  Search
+  Search,
+  Graphic
 ){
 
 // Setup basic map
@@ -109,7 +111,7 @@ function(
   var MLAquery = new Query();
     MLAquery.outFields = ["AgreementNumber","LicenseHolder", "LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"];
 
-  on(document.getElementById("execute"), "click", execute);
+  // on(document.getElementById("execute"), "click", execute);
 
   function execute() {
     MLAquery.where = "LicenseHolder LIKE '%" + dom.byId("LicenseHolder").value + "%'";
@@ -142,7 +144,28 @@ function(
     OccupationsTable.startup();
   };
 
-  function MLAQuery(LH_Name){
+  // add listener for submit button
+  var submit = document.getElementById('MLASubmit');
+  submit.addEventListener("click",getAttributes);
 
-  };
+  function getAttributes(){
+    var formData = new Graphic();
+
+    formData.setAttributes({
+      "LicenseHolder": document.getElementById('LicenseHolder_input').value,
+      "AgreementNumber": document.getElementById('AgreementNumber').value,
+      "LicenseType": document.getElementById('LicenseType').value,
+      "LH_Type": document.getElementById('LH_Type').value,
+      "LH_Address": document.getElementById('LH_Address').value,
+      "LH_City": document.getElementById('LH_City').value,
+      "LH_State": document.getElementById('LH_State').value,
+      "LH_Zip": document.getElementById('LH_Zip').value,
+      "Remarks": document.getElementById('Remarks').value
+    });
+
+    console.log(formData.attributes);
+
+    MLAFeatureLayer.applyEdits(null,formData,null);
+
+  }
 });
