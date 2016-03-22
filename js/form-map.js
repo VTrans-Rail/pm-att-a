@@ -63,7 +63,7 @@ function(
   var search = new Search({
     sources: [{
       featureLayer: MLAFeatureLayer,
-      outFields: ["LicenseHolder","AgreementNumber","LicenseType","LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"],
+      outFields: ["*"],
       displayField: "LicenseHolder",
       suggestionTemplate: "${LicenseHolder}: (${AgreementNumber})",
       name: "License Holders",
@@ -72,10 +72,12 @@ function(
   }, "LicenseHolder");
 
   search.startup();
-
+  var resultsOID;
   // when search completes, populate the form with results attributes
   on(search, "search-results", function(e) {
     document.getElementById("LicenseHolder_input").value = "";
+    resultsOID = e.results[0][0].feature.attributes['OBJECTID'];
+    console.log(resultsOID);
     dom.byId('LicenseHolder_input').value = e.results[0][0].feature.attributes['LicenseHolder'];
     dom.byId('AgreementNumber').value = e.results[0][0].feature.attributes['AgreementNumber'];
     dom.byId('LicenseType').value = e.results[0][0].feature.attributes['LicenseType'];
@@ -149,23 +151,53 @@ function(
   submit.addEventListener("click",getAttributes);
 
   function getAttributes(){
-    var formData = new Graphic();
 
-    formData.setAttributes({
-      "LicenseHolder": document.getElementById('LicenseHolder_input').value,
-      "AgreementNumber": document.getElementById('AgreementNumber').value,
-      "LicenseType": document.getElementById('LicenseType').value,
-      "LH_Type": document.getElementById('LH_Type').value,
-      "LH_Address": document.getElementById('LH_Address').value,
-      "LH_City": document.getElementById('LH_City').value,
-      "LH_State": document.getElementById('LH_State').value,
-      "LH_Zip": document.getElementById('LH_Zip').value,
-      "Remarks": document.getElementById('Remarks').value
-    });
+    var formData = [];
 
-    console.log(formData.attributes);
 
-    MLAFeatureLayer.applyEdits(null,formData,null);
+    formData += '{"attributes": {';
+    formData += "'OBJECTID' : " + resultsOID + ","
+    formData +=  "'LicenseHolder': '" + document.getElementById('LicenseHolder_input').value +"',";
+    formData +=  "'AgreementNumber': '" + document.getElementById('AgreementNumber').value +"',";
+    formData +=  "'LicenseType': '" + document.getElementById('LicenseType').value +"',";
+    formData +=  "'LH_Type': '" + document.getElementById('LH_Type').value +"',";
+    formData +=  "'LH_Address': '" + document.getElementById('LH_Address').value +"',";
+    formData +=  "'LH_City': '" + document.getElementById('LH_City').value +"',";
+    formData +=  "'LH_State': '" + document.getElementById('LH_State').value +"',";
+    formData +=  "'LH_Zip': '" + document.getElementById('LH_Zip').value +"',";
+    formData +=  "'Remarks': '" + document.getElementById('Remarks').value +"'";
+    formData += "}}"
+
+    console.log(formData);
+
+    var updateFeaturesURL = 'http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1/updateFeatures?f=json&features=';
+    updateFeaturesURL += formData;
+
+    $.post(updateFeaturesURL);
+
+    console.log(updateFeaturesURL);
+
+
+    // Old function trying to use applyEdits
+    // var formData = new Graphic();
+    //
+    // formData.setAttributes({
+    //   "LicenseHolder": document.getElementById('LicenseHolder_input').value,
+    //   "AgreementNumber": document.getElementById('AgreementNumber').value,
+    //   "LicenseType": document.getElementById('LicenseType').value,
+    //   "LH_Type": document.getElementById('LH_Type').value,
+    //   "LH_Address": document.getElementById('LH_Address').value,
+    //   "LH_City": document.getElementById('LH_City').value,
+    //   "LH_State": document.getElementById('LH_State').value,
+    //   "LH_Zip": document.getElementById('LH_Zip').value,
+    //   "Remarks": document.getElementById('Remarks').value
+    // });
+    //
+    // console.log(formData.attributes);
+    //
+    // MLAFeatureLayer.applyEdits(null,formData,null);
+
+
 
   }
 });
