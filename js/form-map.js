@@ -91,7 +91,6 @@ function(
 
   // add listener for clear search box X
   var searchClear = document.getElementsByClassName("searchClear");
-  console.log(searchClear);
   searchClear[0].addEventListener("click",clear);
 
   function clear(){
@@ -146,17 +145,41 @@ function(
     OccupationsTable.startup();
   };
 
-  // add listener for submit button
-  var submit = document.getElementById('MLASubmit');
-  submit.addEventListener("click",getAttributes);
+  // add listener for update button
+  var update = document.getElementById('updateMLA');
+  update.addEventListener("click",updateMLA);
 
-  function getAttributes(){
+  // add listener for add new button
+  var newMLA = document.getElementById('newMLA');
+  newMLA.addEventListener("click",addMLA);
 
-    var formData = [];
+  var updateFeaturesURL = 'http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1/updateFeatures?f=json&features=';
+  var addFeaturesURL = 'http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1/addFeatures?f=json&features=';
 
+  var formData = [];
+  var kind = "";
 
+  function updateMLA(){
+    getAttributes("update");
+    updateFeaturesURL += formData;
+    console.log(formData);
+    // $.post(updateFeaturesURL);
+  };
+
+  function addMLA(){
+    getAttributes("add");
+    addFeaturesURL += formData;
+    console.log(formData);
+    // $.post(addFeaturesURL);
+  };
+
+  function getAttributes(kind){
+    formData = "";
+    console.log(kind);
     formData += '{"attributes": {';
-    formData += "'OBJECTID' : " + resultsOID + ","
+    if (kind == "update") {
+      formData += "'OBJECTID' : " + resultsOID + ","
+    }
     formData +=  "'LicenseHolder': '" + document.getElementById('LicenseHolder_input').value +"',";
     formData +=  "'AgreementNumber': '" + document.getElementById('AgreementNumber').value +"',";
     formData +=  "'LicenseType': '" + document.getElementById('LicenseType').value +"',";
@@ -167,37 +190,5 @@ function(
     formData +=  "'LH_Zip': '" + document.getElementById('LH_Zip').value +"',";
     formData +=  "'Remarks': '" + document.getElementById('Remarks').value +"'";
     formData += "}}"
-
-    console.log(formData);
-
-    var updateFeaturesURL = 'http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1/updateFeatures?f=json&features=';
-    updateFeaturesURL += formData;
-
-    $.post(updateFeaturesURL);
-
-    console.log(updateFeaturesURL);
-
-
-    // Old function trying to use applyEdits
-    // var formData = new Graphic();
-    //
-    // formData.setAttributes({
-    //   "LicenseHolder": document.getElementById('LicenseHolder_input').value,
-    //   "AgreementNumber": document.getElementById('AgreementNumber').value,
-    //   "LicenseType": document.getElementById('LicenseType').value,
-    //   "LH_Type": document.getElementById('LH_Type').value,
-    //   "LH_Address": document.getElementById('LH_Address').value,
-    //   "LH_City": document.getElementById('LH_City').value,
-    //   "LH_State": document.getElementById('LH_State').value,
-    //   "LH_Zip": document.getElementById('LH_Zip').value,
-    //   "Remarks": document.getElementById('Remarks').value
-    // });
-    //
-    // console.log(formData.attributes);
-    //
-    // MLAFeatureLayer.applyEdits(null,formData,null);
-
-
-
   }
 });
