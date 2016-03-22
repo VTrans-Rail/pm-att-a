@@ -1,3 +1,10 @@
+// ----------------------------------------------------------------------------
+// ----------------This is the form-map.js (main javascript file) for the
+// form.html It is essential for loading the map and the layers of the map.
+// It also defines the behavior of the sidebar and table.----------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
 require([
   "esri/map",
   "esri/layers/FeatureLayer",
@@ -22,14 +29,19 @@ function(
   Graphic
 ){
 
-// Setup basic map
+//----------------------------------------------------------------------------
+// Setup the basic map
+//----------------------------------------------------------------------------
+
   var map = new Map("map", {
     center: [-73.75, 44],
     zoom: 7,
     basemap: "topo-vector"
   });
 
-  // Create the feature layers
+//----------------------------------------------------------------------------
+// Create feature layers
+//----------------------------------------------------------------------------
 
   // MLA feature layer
   var MLAURL = "https://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1";
@@ -53,12 +65,9 @@ function(
     id: "AttAFC"
   });
 
-  // add listener for license holder search
-  var LH_SearchBox = document.getElementById("LicenseHolder");
-  // LH_SearchBox.addEventListener("change",execute);
-
-
-  // Make License Holder text box a search box
+//----------------------------------------------------------------------------
+// Setup License Holder text search box
+//----------------------------------------------------------------------------
 
   var search = new Search({
     sources: [{
@@ -72,8 +81,16 @@ function(
   }, "LicenseHolder");
 
   search.startup();
+
+//----------------------------------------------------------------------------
+// When search results are returned, populate the form field values.
+// Add ability to clear all of the boxes
+//----------------------------------------------------------------------------
+
+  // Returned OBJECTID variable. Needs to be outside function(e) so it can be reused
   var resultsOID;
-  // when search completes, populate the form with results attributes
+
+  // Populate the form fields:
   on(search, "search-results", function(e) {
     document.getElementById("LicenseHolder_input").value = "";
     resultsOID = e.results[0][0].feature.attributes['OBJECTID'];
@@ -104,33 +121,38 @@ function(
     document.getElementById('LH_Zip').value = "";
     document.getElementById('Remarks').value = "";
   }
+//----------------------------------------------------------------------------
+// don't think this is needed right now. comment out to check
+  // // add QueryTask
+  //
+  // var MLAqueryTask = new QueryTask(MLAURL);
+  //
+  // var MLAquery = new Query();
+  //   MLAquery.outFields = ["AgreementNumber","LicenseHolder", "LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"];
+  //
+  // // on(document.getElementById("execute"), "click", execute);
+  //
+  // function execute() {
+  //   MLAquery.where = "LicenseHolder LIKE '%" + dom.byId("LicenseHolder").value + "%'";
+  //   MLAqueryTask.execute(MLAquery, showResults);
+  // };
+  //
+  // function showResults (results) {
+  //   var resultItems = [];
+  //   var resultCount = results.features.length;
+  //   for (var i = 0; i < resultCount; i++) {
+  //     var featureAttributes = results.features[i].attributes;
+  //     for (var attr in featureAttributes) {
+  //       console.log(featureAttributes[attr]);
+  //     }
+  //   }
+  // };
 
-  // add QueryTask
 
-  var MLAqueryTask = new QueryTask(MLAURL);
+//----------------------------------------------------------------------------
+// Create the feature table at the bottom of the map
+//----------------------------------------------------------------------------
 
-  var MLAquery = new Query();
-    MLAquery.outFields = ["AgreementNumber","LicenseHolder", "LH_Type","LH_Address","LH_City","LH_State","LH_Zip","Remarks"];
-
-  // on(document.getElementById("execute"), "click", execute);
-
-  function execute() {
-    MLAquery.where = "LicenseHolder LIKE '%" + dom.byId("LicenseHolder").value + "%'";
-    MLAqueryTask.execute(MLAquery, showResults);
-  };
-
-  function showResults (results) {
-    var resultItems = [];
-    var resultCount = results.features.length;
-    for (var i = 0; i < resultCount; i++) {
-      var featureAttributes = results.features[i].attributes;
-      for (var attr in featureAttributes) {
-        console.log(featureAttributes[attr]);
-      }
-    }
-  };
-
-  // Show table at the bottom half of the map div
   function loadTable(){
     // make map halfsize and display footer
     document.getElementById('footer').style.display = "block";
@@ -145,6 +167,17 @@ function(
     OccupationsTable.startup();
   };
 
+//----------------------------------------------------------------------------
+// Setup MLA form button actions
+//----------------------------------------------------------------------------
+
+// variables
+var updateFeaturesURL = 'http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1/updateFeatures?f=json&features=';
+var addFeaturesURL = 'http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1/addFeatures?f=json&features=';
+
+var formData = [];
+var kind = "";
+
   // add listener for update button
   var update = document.getElementById('updateMLA');
   update.addEventListener("click",updateMLA);
@@ -153,12 +186,7 @@ function(
   var newMLA = document.getElementById('newMLA');
   newMLA.addEventListener("click",addMLA);
 
-  var updateFeaturesURL = 'http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1/updateFeatures?f=json&features=';
-  var addFeaturesURL = 'http://services1.arcgis.com/NXmBVyW5TaiCXqFs/ArcGIS/rest/services/dev_Attachment_A/FeatureServer/1/addFeatures?f=json&features=';
-
-  var formData = [];
-  var kind = "";
-
+// function for Update button
   function updateMLA(){
     getAttributes("update");
     updateFeaturesURL += formData;
@@ -166,6 +194,7 @@ function(
     // $.post(updateFeaturesURL);
   };
 
+// function for Add New button
   function addMLA(){
     getAttributes("add");
     addFeaturesURL += formData;
@@ -173,6 +202,7 @@ function(
     // $.post(addFeaturesURL);
   };
 
+// Grab the attributes and build a JSON string that will be passed to the Update and Add functions
   function getAttributes(kind){
     formData = "";
     console.log(kind);
